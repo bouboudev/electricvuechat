@@ -7,11 +7,11 @@
     <form class="login-form" @submit.prevent="Login">
       <div class="form-inner">
         <h1>Se connecter à Electric Chat ⚡</h1>
-        <label for="username">Username</label>
+        <label for="username">Pseudo</label>
         <input
           type="text"
           v-model="inputUsername"
-          placeholder="Merci de saisir votre username..."
+          placeholder="Merci de saisir votre pseudo..."
         />
         <input type="submit" value="Se connecter" />
       </div>
