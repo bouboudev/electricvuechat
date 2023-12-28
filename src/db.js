@@ -1,6 +1,7 @@
 
 import firebase from "firebase/app";
 import "firebase/database";
+import {getAuth} from "firebase/auth";
 
 
 const config = {
@@ -15,5 +16,7 @@ appId: "process.env.CONFIGAPIID"
 }
 
 const db  = firebase.initializeApp(config);
-export default db;
+
+const auth = getAuth(db);
+export default {db, auth}
 
