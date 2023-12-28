@@ -23,5 +23,5 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-### LIEN HEROKU
-https://electricvuechat.herokuapp.com
+### LIEN
+https://incandescent-caramel-476d92.netlify.app/
