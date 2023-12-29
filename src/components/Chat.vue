@@ -1,6 +1,7 @@
 <template>
     <div class="view chat">
         <header>
+            <h1 class="title">Electric Chat ⚡</h1>
             <button class="logout" @click="Logout">Se déconnecter</button>
             <h1>Bienvenue, {{ state.username}}</h1>
         </header>

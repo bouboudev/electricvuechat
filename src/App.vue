@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+    <div id="app">
+        <router-view />
+    </div>
 </template>
 
 
@@ -149,20 +149,21 @@
                     font-size: 18px;
                     font-weight: 700;
                     cursor: pointer;
-                    
+
                 }
-                p{
-                      display: flex;
-                      justify-content: center;
-                      align-items: center;
-                      text-decoration: none;
-                      margin: 10px 0px;
-                        
-                        a{
-                            color: var(--couleur-principale);
-                            margin-left: 5px;
-                        }
-                      }
+
+                p {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-decoration: none;
+                    margin: 10px 0px;
+
+                    a {
+                        color: var(--couleur-principale);
+                        margin-left: 5px;
+                    }
+                }
 
                 &:focus-within {
                     label {
@@ -177,14 +178,15 @@
                             color: #666;
                         }
                     }
-                    p{
-                      display: flex;
-                      justify-content: center;
-                      align-items: center;
-                      text-decoration: none;
-                      margin: 10px 0px;
-                        
-                        a{
+
+                    p {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        text-decoration: none;
+                        margin: 10px 0px;
+
+                        a {
                             color: var(--couleur-principale);
                             margin-left: 5px;
                         }
@@ -203,6 +205,16 @@
             width: 100%;
             padding: 50px 30px 10px;
 
+            .title {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-decoration: none;
+                margin: 10px 0px;
+                color: #fff;
+                font-size: 48px;
+                margin-bottom: 30px;
+            }
             .logout {
                 position: absolute;
                 top: 15px;
@@ -218,6 +230,7 @@
                 text-align: right;
                 padding: 10px 15px;
             }
+
             .logout:hover {
                 color: var(--couleur-principale);
                 background-color: #fff;
@@ -242,9 +255,9 @@
                 margin-bottom: 15px;
 
                 .message-inner {
-                  display: flex;
-                  flex-direction: column;
-                  
+                    display: flex;
+                    flex-direction: column;
+
                     .username {
                         color: #888;
                         font-size: 16px;
@@ -252,11 +265,13 @@
                         padding-left: 15px;
                         padding-right: 15px;
                     }
+
                     .message-content {
-                      display: flex;
-                      align-items: center;
+                        display: flex;
+                        align-items: center;
                     }
-                    .delete{
+
+                    .delete {
                         text-decoration: none;
                         margin: 10px 0px;
                         color: #fff;
@@ -267,11 +282,13 @@
                         border-radius: 8px;
                         cursor: pointer;
                     }
+
                     .current-user & {
-                      .delete {
-                        align-self: flex-end;
-                      }
+                        .delete {
+                            align-self: flex-end;
+                        }
                     }
+
                     .content {
                         display: inline-block;
                         padding: 10px 20px;
@@ -386,5 +403,4 @@
             }
         }
     }
-}
-</style>
+}</style>
