@@ -32,7 +32,6 @@ export default {
         });
 
         const login = async () => {
-            console.log("login", login_form);
             store.dispatch('login', login_form);
         }
 

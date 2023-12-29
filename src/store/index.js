@@ -30,7 +30,6 @@ export default createStore({
                 
                 if (user.emailVerified) {
                     commit('SET_USER', {user});
-                    console.log(user);
 
                     if (user) {
                         router.push('/Chat');
@@ -111,7 +110,7 @@ export default createStore({
 
             if (user) {
                 commit('SET_USER', {user});
-                console.log('User connecté:', user);
+                console.log('User connecté:', user.displayName);
             } else {
                 commit('CLEAR_USER');
                 console.log('User déconnecté');
