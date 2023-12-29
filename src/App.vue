@@ -158,7 +158,8 @@
                     align-items: center;
                     text-decoration: none;
                     margin: 10px 0px;
-
+                    /* bold */
+                    font-weight: 600;
                     a {
                         color: var(--couleur-principale);
                         margin-left: 5px;

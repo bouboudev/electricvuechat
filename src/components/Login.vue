@@ -8,7 +8,7 @@
                 <label for="password">Mot de passe</label>
                 <input type="password" v-model="login_form.password" placeholder="Mot de passe" />
                 <input type="submit" value="Se connecter" />
-                <p>Pas de compte ? <router-link to="/register">S'inscrire</router-link></p>
+                <p>Pas encore inscrit ? <router-link to="/register">Inscrivez-vous ici</router-link></p>
             </div>
         </form>
     </div>
