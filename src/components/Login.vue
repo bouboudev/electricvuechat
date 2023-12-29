@@ -1,12 +1,12 @@
 <template>
     <div class="view login">
-        <form class="login-form" @submit.prevent="Login">
+        <form class="login-form" @submit.prevent="login">
             <div class="form-inner">
                 <h1>Se connecter à Electric Chat ⚡</h1>
-                <label for="username">Pseudo</label>
-                <input type="text" v-model="inputUsername" placeholder="Pseudo..." />
+                <label for="username">Email</label>
+                <input type="email" v-model="login_form.email" placeholder="Email" />
                 <label for="password">Mot de passe</label>
-                <input type="text" v-model="inputPassword" placeholder="Mot de passe" />
+                <input type="password" v-model="login_form.password" placeholder="Mot de passe" />
                 <input type="submit" value="Se connecter" />
                 <p>Pas de compte ? <router-link to="/register">S'inscrire</router-link></p>
             </div>
@@ -15,68 +15,30 @@
 </template>
 
 <script>
-import { reactive, onMounted, ref } from "vue";
-import db from "../db";
+import { reactive, ref } from "vue";
+import {useStore} from "vuex";
 
 export default {
     setup() {
-        const inputUsername = ref("");
-        const inputMessage = ref("");
+        const login_form = reactive({
+            email: "",
+            password: "",
+        });
+        const store = useStore();
 
         const state = reactive({
             username: "",
             messages: [],
         });
 
-        const Login = () => {
-            if (inputUsername.value != "" || inputUsername.value != null) {
-                state.username = inputUsername.value;
-                inputUsername.value = "";
-            }
-        };
-
-        const Logout = () => {
-            state.username = "";
+        const login = async () => {
+            console.log("login", login_form);
+            store.dispatch('login', login_form);
         }
-        const SendMessage = () => {
-            const messageRef = db.database().ref("messages");
-
-            if (inputMessage.value === "" || inputMessage.value === null) {
-                return;
-            }
-            const message = {
-                username: state.username,
-                content: inputMessage.value,
-            };
-            messageRef.push(message);
-            inputMessage.value = "";
-        }
-
-        onMounted(() => {
-            const messagesRef = db.database().ref("messages");
-            // verifie si nouveau message ajouté si changement il envoi snapshot de la base de donné et mettra à jour
-            messagesRef.on('value', snapshot => {
-                const data = snapshot.val();
-                let messages = [];
-                // parcourir l'ensemble des messages de la base avec username id et content
-                Object.keys(data).forEach(key => {
-                    messages.push({
-                        id: key,
-                        username: data[key].username,
-                        content: data[key].content
-                    });
-                });
-                state.messages = messages;
-            });
-        });
 
         return {
-            inputUsername,
-            Login,
-            state,
-            inputMessage,
-            SendMessage,
-            Logout
+            login_form,
+            login,
         }
     }
 }

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '../store'
 import Login from '../components/Login.vue'
 import Chat from '../components/Chat.vue'
 
@@ -11,7 +12,19 @@ const routes = [
   {
     path: '/Chat',
     name: 'Chat',
-    component: Chat
+    component: Chat,
+    meta: {
+      requiresAuth: true
+    },
+    beforeEnter: (to, from, next) => {
+      const user = store.state.user;
+      if (user) {
+        next();
+      } else {
+        next('/');
+        
+      }
+    }
   },
   {
     path: '/Register',

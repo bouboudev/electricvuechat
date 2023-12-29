@@ -2,7 +2,7 @@
     <div class="view chat">
         <header>
             <button class="logout" @click="Logout">Se déconnecter</button>
-            <h1>Bienvenue, {{ state.username }}</h1>
+            <h1>Bienvenue, {{ state.username.email }}</h1>
         </header>
 
         <section class="chat-box">
@@ -12,7 +12,10 @@
                 ">
                 <div class="message-inner">
                     <div class="username">{{ message.username }}</div>
-                    <div class="content">{{ message.content }}</div>
+                    <div class="message-content">
+                        <div class="content">{{ message.content }}</div>
+                        <div v-if="message.username === state.username.email" class="delete" @click="DeleteMessage(message.id, message.username)">X</div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -28,72 +31,83 @@
 
 <script>
 import { reactive, onMounted, ref } from "vue";
-import db from "../db";
-export default {
+import { db } from '../firebase/index';
+import { getDatabase, ref as firebaseRef, onValue, push, remove } from 'firebase/database';
+import { useStore } from 'vuex';
 
+export default {
     setup() {
-        const inputUsername = ref("");
         const inputMessage = ref("");
+        const store = useStore();
 
         const state = reactive({
-            username: "",
+            username: store.state.user,
             messages: [],
         });
 
-        const Login = () => {
-            if (inputUsername.value != "" || inputUsername.value != null) {
-                state.username = inputUsername.value;
-                inputUsername.value = "";
-            }
-        };
 
         const Logout = () => {
-            state.username = "";
-        }
+            store.dispatch('logout');
+                    }
+
         const SendMessage = () => {
-            const messageRef = db.database().ref("messages");
+            const messagesRef = firebaseRef(db, "messages");
 
             if (inputMessage.value === "" || inputMessage.value === null) {
                 return;
             }
+
             const message = {
-                username: state.username,
+                username: state.username.email,
                 content: inputMessage.value,
             };
-            messageRef.push(message);
+
+            push(messagesRef, message);
+                
             inputMessage.value = "";
+        }
+        const DeleteMessage = (id, messageUsername) => {
+            console.log('messageusername',messageUsername);
+            if (state.username.email === messageUsername ) {
+                const messageRef = firebaseRef(db, `messages/${id}`);
+                remove(messageRef);
+                console.log(id);
+            }
         }
 
         onMounted(() => {
-            const messagesRef = db.database().ref("messages");
-            // verifie si nouveau message ajouté si changement il envoi snapshot de la base de donné et mettra à jour
-            messagesRef.on('value', snapshot => {
+            const messagesRef = firebaseRef(db, "messages");
+
+            onValue(messagesRef, (snapshot) => {
                 const data = snapshot.val();
                 let messages = [];
-                // parcourir l'ensemble des messages de la base avec username id et content
-                Object.keys(data).forEach(key => {
-                    messages.push({
-                        id: key,
-                        username: data[key].username,
-                        content: data[key].content
+
+                if (data) {
+                    Object.keys(data).forEach(key => {
+                        messages.push({
+                            id: key,
+                            username: data[key].username,
+                            content: data[key].content
+                        });
                     });
-                });
+                }
+
                 state.messages = messages;
             });
+            //recuperer l'utilisateur connecté dans le store
+            console.log(store.state.user,);
         });
 
         return {
-            inputUsername,
-            Login,
             state,
             inputMessage,
             SendMessage,
-            Logout
+            Logout,
+            DeleteMessage,
         }
     }
 }
+
 </script>
 
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

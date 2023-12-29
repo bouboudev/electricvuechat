@@ -4,6 +4,7 @@
   </div>
 </template>
 
+
 <style>
 * {
     font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -65,7 +66,7 @@
                     transition: 0.4s;
                 }
 
-                input[type="text"] {
+                input[type="email"] {
                     appearance: none;
                     border: none;
                     outline: none;
@@ -192,6 +193,13 @@
                 font-size: 18px;
                 margin-bottom: 10px;
                 text-align: right;
+                padding: 10px 15px;
+            }
+            .logout:hover {
+                color: var(--couleur-principale);
+                background-color: #fff;
+                border-radius: 8px;
+                transition: 0.4s;
             }
 
             h1 {
@@ -211,6 +219,9 @@
                 margin-bottom: 15px;
 
                 .message-inner {
+                  display: flex;
+                  flex-direction: column;
+                  
                     .username {
                         color: #888;
                         font-size: 16px;
@@ -218,7 +229,26 @@
                         padding-left: 15px;
                         padding-right: 15px;
                     }
-
+                    .message-content {
+                      display: flex;
+                      align-items: center;
+                    }
+                    .delete{
+                        text-decoration: none;
+                        margin: 10px 0px;
+                        color: #fff;
+                        font-size: 8px;
+                        margin-left: 5px;
+                        padding: 5px 10px;
+                        background-color: var(--couleur-principale);
+                        border-radius: 8px;
+                        cursor: pointer;
+                    }
+                    .current-user & {
+                      .delete {
+                        align-self: flex-end;
+                      }
+                    }
                     .content {
                         display: inline-block;
                         padding: 10px 20px;
