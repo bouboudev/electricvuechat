@@ -5,6 +5,8 @@
                 <h1>S'inscrire à Electric Chat ⚡</h1>
                 <label for="username">Email</label>
                 <input type="email" v-model="register_form.email" placeholder="Email..." />
+                <label for="username">Pseudo</label>
+                <input type="text" v-model="register_form.username" placeholder="Pseudo..." />
                 <label for="password">Mot de passe</label>
                 <input type="password" v-model="register_form.password" placeholder="Mot de passe" />
                 <label for="password">Confirmer le mot de passe</label>
@@ -18,7 +20,7 @@
 </template>
 
 <script>
-import { reactive, onMounted, ref } from "vue";
+import { reactive,  } from "vue";
 import {useStore} from "vuex";
 
 export default {
@@ -26,18 +28,17 @@ export default {
         const register_form = reactive({
             email: "",
             password: "",
+            username: "",
         });
         const store = useStore();
 
 
         const register = async () => {
-            console.log("register", register_form);
-            // confirmer le mot de passe
             if (register_form.password !== register_form.password_confirmation) {
                 alert("Les mots de passe ne correspondent pas");
                 return;
             }
-            store.dispatch('register', register_form);
+            store.dispatch('register', { email: register_form.email, password: register_form.password, username: register_form.username });
         }
 
         return {

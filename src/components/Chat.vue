@@ -2,7 +2,7 @@
     <div class="view chat">
         <header>
             <button class="logout" @click="Logout">Se déconnecter</button>
-            <h1>Bienvenue, {{ state.username.email }}</h1>
+            <h1>Bienvenue, {{ state.username}}</h1>
         </header>
 
         <section class="chat-box">
@@ -14,7 +14,7 @@
                     <div class="username">{{ message.username }}</div>
                     <div class="message-content">
                         <div class="content">{{ message.content }}</div>
-                        <div v-if="message.username === state.username.email" class="delete" @click="DeleteMessage(message.id, message.username)">X</div>
+                        <div v-if="message.username === state.username" class="delete" @click="DeleteMessage(message.id, message.username)">X</div>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,8 @@ export default {
         const store = useStore();
 
         const state = reactive({
-            username: store.state.user,
+            username: store.state.user.displayName,
+            email: store.state.user.email,
             messages: [],
         });
 
@@ -58,9 +59,11 @@ export default {
             }
 
             const message = {
-                username: state.username.email,
+                username: state.username,
+                email: state.email,
                 content: inputMessage.value,
             };
+            console.log(message);
 
             push(messagesRef, message);
                 
@@ -68,7 +71,7 @@ export default {
         }
         const DeleteMessage = (id, messageUsername) => {
             console.log('messageusername',messageUsername);
-            if (state.username.email === messageUsername ) {
+            if (messageUsername === state.username) {
                 const messageRef = firebaseRef(db, `messages/${id}`);
                 remove(messageRef);
                 console.log(id);
@@ -76,6 +79,7 @@ export default {
         }
 
         onMounted(() => {
+            console.log("mounted", state.value);
             const messagesRef = firebaseRef(db, "messages");
 
             onValue(messagesRef, (snapshot) => {
@@ -94,8 +98,7 @@ export default {
 
                 state.messages = messages;
             });
-            //recuperer l'utilisateur connecté dans le store
-            console.log(store.state.user,);
+
         });
 
         return {

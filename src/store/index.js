@@ -2,15 +2,18 @@ import { createStore } from 'vuex';
 import router from '../router';
 // import { auth } from '../db';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { sendEmailVerification  } from 'firebase/auth';
+import { sendEmailVerification,   } from 'firebase/auth';
+import { updateProfile } from 'firebase/auth';
 
 export default createStore({
     state: {
         user: null,
+        pseudo: null,
     },
     mutations: {
-        SET_USER(state, user) {
+        SET_USER(state, { user }) {
             state.user = user;
+            state.pseudo = user ? user.displayName : null;
         },
 
         CLEAR_USER(state) {
@@ -26,7 +29,7 @@ export default createStore({
                 const user = userCredential.user;
                 
                 if (user.emailVerified) {
-                    commit('SET_USER', user);
+                    commit('SET_USER', {user});
                     console.log(user);
 
                     if (user) {
@@ -53,14 +56,22 @@ export default createStore({
         },
         
 
-        async register({ commit }, { email, password }) {
-            console.log('register', email, password);
+        async register({ commit }, { email, password, username}) {
 
             const auth = getAuth();
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            
+                await updateProfile(auth.currentUser, {
+                    displayName: username,
+                });
+
+                
+                
                 await sendEmailVerification(auth.currentUser);
-                commit('SET_USER', userCredential.user);
+                const updatedUser = await getAuth().currentUser;
+
+                commit('SET_USER', { user: updatedUser });
             } catch (error) {
                 switch (error.code) {
                     case 'auth/email-already-in-use':
@@ -99,7 +110,7 @@ export default createStore({
             const user = auth.currentUser;
 
             if (user) {
-                commit('SET_USER', user);
+                commit('SET_USER', {user});
                 console.log('User connecté:', user);
             } else {
                 commit('CLEAR_USER');

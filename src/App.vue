@@ -89,6 +89,29 @@
                     }
                 }
 
+                input[type="text"] {
+                    appearance: none;
+                    border: none;
+                    outline: none;
+                    background: none;
+                    display: block;
+                    width: 100%;
+                    padding: 10px 15px;
+                    border-radius: 8px;
+                    margin-bottom: 15px;
+
+                    color: #333;
+                    font-size: 18px;
+                    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+                    background-color: #f3f3f3;
+                    transition: 0.4s;
+
+                    &::placeholder {
+                        color: #888;
+                        transition: 0.4s;
+                    }
+                }
+
                 input[type="password"] {
                     appearance: none;
                     border: none;
