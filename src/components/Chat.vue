@@ -35,7 +35,9 @@ import { reactive, onMounted, ref } from "vue";
 import { db } from '../firebase/index';
 import { getDatabase, ref as firebaseRef, onValue, push, remove } from 'firebase/database';
 import { useStore } from 'vuex';
-
+import ModerateContentService from '../ModerateContentService';
+import axios from 'axios';
+import { BASE_URL, analyserTexte } from '../ModerateContentService';
 export default {
     setup() {
         const inputMessage = ref("");
@@ -52,11 +54,17 @@ export default {
             store.dispatch('logout');
                     }
 
-        const SendMessage = () => {
+        const SendMessage = async () => {
             const messagesRef = firebaseRef(db, "messages");
 
             if (inputMessage.value === "" || inputMessage.value === null) {
                 return;
+            }
+            const moderationResult = await analyserTexte(inputMessage.value);
+
+            if (moderationResult && moderationResult.bad_words.length > 0) {
+            alert('Votre message contient des mots interdits. Veuillez reformuler.');
+            return;
             }
 
             const message = {
@@ -64,7 +72,6 @@ export default {
                 email: state.email,
                 content: inputMessage.value,
             };
-            console.log(message);
 
             push(messagesRef, message);
                 
