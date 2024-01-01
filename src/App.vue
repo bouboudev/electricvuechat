@@ -271,20 +271,31 @@
                         align-items: center;
                     }
 
-                    .delete {
+                    .edit{
                         text-decoration: none;
-                        margin: 10px 0px;
-                        color: #fff;
+                        color: var(--couleur-principale);
                         font-size: 8px;
-                        margin-left: 5px;
-                        padding: 5px 10px;
-                        background-color: var(--couleur-principale);
                         border-radius: 8px;
                         cursor: pointer;
+                        padding: 5px 5px;
                     }
+
+                    .delete {
+                        text-decoration: none;
+                        color: var(--couleur-principale);
+                        font-size: 8px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        padding: 5px 5px;
+                    }
+
+
 
                     .current-user & {
                         .delete {
+                            align-self: flex-end;
+                        }
+                        .edit {
                             align-self: flex-end;
                         }
                     }

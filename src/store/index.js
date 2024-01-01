@@ -4,11 +4,14 @@ import router from '../router';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { sendEmailVerification,   } from 'firebase/auth';
 import { updateProfile } from 'firebase/auth';
+import { getDatabase, ref as firebaseRef, onValue, push, remove } from 'firebase/database';
+import { db } from '../firebase/index';
 
 export default createStore({
     state: {
         user: null,
         pseudo: null,
+        connectedUsers: [],
     },
     mutations: {
         SET_USER(state, { user }) {
@@ -23,13 +26,20 @@ export default createStore({
     actions: {
         async login({ commit }, { email, password }) {
             const auth = getAuth();
-        
+
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
-                
                 if (user.emailVerified) {
-                    commit('SET_USER', {user});
+                    commit('SET_USER', { user });
+                        const usersRef = firebaseRef(db, "usersConnected");
+                        // envoi de l'uid de l'utilisateur dans la liste des utilisateurs connectés
+                        const userConnected = {
+                            userUId: user.uid,
+                            userDisplayName: user.displayName,
+                        }
+                        push(usersRef, userConnected);
+                        console.log('User connecté:', user.displayName);
 
                     if (user) {
                         router.push('/Chat');
@@ -37,8 +47,7 @@ export default createStore({
                         console.error('User not defined after login.');
                     }
                 } else {
-
-                    alert("Veuillez vérifier votre email avant de vous connecter.");
+                    alert('Veuillez vérifier votre email avant de vous connecter.');
                 }
             } catch (error) {
                 switch (error.code) {
@@ -53,20 +62,16 @@ export default createStore({
                 }
             }
         },
-        
 
-        async register({ commit }, { email, password, username}) {
-
+        async register({ commit }, { email, password, username }) {
             const auth = getAuth();
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            
+
                 await updateProfile(auth.currentUser, {
                     displayName: username,
                 });
 
-                
-                
                 await sendEmailVerification(auth.currentUser);
                 const updatedUser = await getAuth().currentUser;
 
@@ -97,6 +102,31 @@ export default createStore({
 
         async logout({ commit }) {
             const auth = getAuth();
+            const user = auth.currentUser;
+            console.log('User déconnecté', auth.currentUser.uid);
+
+            //supprimer l'id de l'utilisateur de la liste des utilisateurs connectés
+                const connectedUsersRef = firebaseRef(db, 'usersConnected');
+                //créer un tableau d'objet avec les utilisateurs connectés
+                const usersConnected = [];
+                //récupérer la liste des utilisateurs connectés avec onValue
+                onValue(connectedUsersRef, (snapshot) => {
+                    const data = snapshot.val();
+                    // tout récupérer dans un tableau meme l'id de l'objet de la collection
+                    for (let id in data) {
+                        usersConnected.push({ id, ...data[id] });
+                    }
+                });
+                console.log('usersConnected', usersConnected);
+                // parcourir le tableau usersConnected pour trouver l'objet avec l'id de l'utilisateur déconnecté
+                for (let i = 0; i < usersConnected.length; i++) {
+                    if (usersConnected[i].userUId === user.uid) {
+                        // supprimer l'objet avec l'id de l'utilisateur déconnecté
+                        const userRef = firebaseRef(db, `usersConnected/${usersConnected[i].id}`);
+                        remove(userRef);
+                    }
+                }
+
             await signOut(auth);
 
             commit('CLEAR_USER');
@@ -109,7 +139,7 @@ export default createStore({
             const user = auth.currentUser;
 
             if (user) {
-                commit('SET_USER', {user});
+                commit('SET_USER', { user });
                 console.log('User connecté:', user.displayName);
             } else {
                 commit('CLEAR_USER');
