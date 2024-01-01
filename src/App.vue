@@ -229,15 +229,15 @@
                 margin-bottom: 10px;
                 text-align: right;
                 padding: 10px 15px;
+                border-radius: 8px;
+                font-weight: 600;
             }
-
             .logout:hover {
                 color: var(--couleur-principale);
-                background-color: #fff;
+                background-color: #1f1f1f;
                 border-radius: 8px;
-                transition: 0.4s;
+                transition: 0.3s;
             }
-
             h1 {
                 color: var(--couleur-principale);
             }
