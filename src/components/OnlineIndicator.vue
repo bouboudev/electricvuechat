@@ -29,24 +29,10 @@ export default {
     setup(props) {
         const isOnline = computed(() => {
             if (props.connectedUsers && props.userId) {
-                console.log('true');
                 return props.connectedUsers.some(user => user.userUId === props.userId);
             }
-            console.log('false');
             return false;
         });
-
-
-        onMounted(() => {
-            console.log('userId', props.userId);
-            console.log('connectedUsers', props.connectedUsers);
-        
-        });
-        // const computed = {
-        //     isOnline() {
-        //         return this.connectedUsers.some(user => user.userUId === this.userId);
-        //     }
-        // }
 
         return {
             isOnline,

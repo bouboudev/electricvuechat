@@ -39,7 +39,6 @@ export default createStore({
                             userDisplayName: user.displayName,
                         }
                         push(usersRef, userConnected);
-                        console.log('User connecté:', user.displayName);
 
                     if (user) {
                         router.push('/Chat');
@@ -103,7 +102,6 @@ export default createStore({
         async logout({ commit }) {
             const auth = getAuth();
             const user = auth.currentUser;
-            console.log('User déconnecté', auth.currentUser.uid);
 
             //supprimer l'id de l'utilisateur de la liste des utilisateurs connectés
                 const connectedUsersRef = firebaseRef(db, 'usersConnected');
@@ -117,7 +115,6 @@ export default createStore({
                         usersConnected.push({ id, ...data[id] });
                     }
                 });
-                console.log('usersConnected', usersConnected);
                 // parcourir le tableau usersConnected pour trouver l'objet avec l'id de l'utilisateur déconnecté
                 for (let i = 0; i < usersConnected.length; i++) {
                     if (usersConnected[i].userUId === user.uid) {
@@ -140,10 +137,8 @@ export default createStore({
 
             if (user) {
                 commit('SET_USER', { user });
-                console.log('User connecté:', user.displayName);
             } else {
                 commit('CLEAR_USER');
-                console.log('User déconnecté');
             }
         },
     },
