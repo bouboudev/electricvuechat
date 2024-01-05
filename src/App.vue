@@ -215,6 +215,16 @@
                 font-size: 40px;
                 margin-bottom: 30px;
             }
+            .subtitle{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-decoration: none;
+                margin: 10px 0px;
+                color: var(--couleur-principale);
+                font-size: 20px;
+                margin-bottom: 30px;
+            }
             .logout {
                 position: absolute;
                 top: 15px;
@@ -247,7 +257,8 @@
             border-radius: 24px 24px 0px 0px;
             background-color: #fff;
             box-shadow: 0px 0px 12px rgba(100, 100, 100, 0.2);
-            flex: 1 1 100%;
+            flex: 1;
+            width: 100%;
             padding: 30px;
 
             .message {
@@ -388,6 +399,28 @@
         height: auto;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .chat-box {
+            border-radius: 24px 24px 0px 0px;
+            background-color: #fff;
+            box-shadow: 0px 0px 12px rgba(100, 100, 100, 0.2);
+            flex: 1;
+            width: 100%;
+            padding: 30px;
+            max-width: 80%;
+            margin: 0 auto;
+    }
+
+    footer {
+            position: sticky;
+            bottom: 0px;
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0px 0px 12px rgba(100, 100, 100, 0.2);
+            max-width: 80%;
+            margin: 0 auto;
+            width: 100%;
     }
 
     .login-form {
